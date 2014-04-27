@@ -3,15 +3,17 @@ var Automator;
 
 Automator = (function() {
   Automator.prototype.options = {
-    dropboxNamespace: "automator"
+    namespace: "automator"
   };
 
   function Automator(datastore, options) {
     if (options == null) {
       options = {};
     }
-    this.datastore = datastore;
     $.extend(this.options, options);
+    this.datastore = datastore;
+    this.categories = datastore.getTable("" + this.options.namespace + "-categories");
+    this.words = datastore.getTable("" + this.options.namespace + "-words");
   }
 
   Automator.prototype.train = function(text, category) {};

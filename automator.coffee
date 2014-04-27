@@ -4,11 +4,13 @@ class Automator
 
   # Defaults
   options:
-    dropboxNamespace: "automator"
+    namespace: "automator"
 
   constructor: (datastore, options = {})->
-    @datastore = datastore
     $.extend @options, options
+    @datastore = datastore
+    @categories = datastore.getTable "#{@options.namespace}-categories"
+    @words = datastore.getTable "#{@options.namespace}-words"
 
   train: (text, category) ->
     return

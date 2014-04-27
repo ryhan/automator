@@ -22,14 +22,11 @@ $(function() {
     datastoreManager = client.getDatastoreManager();
 
     datastoreManager.openDefaultDatastore(function (error, datastore) {
-
-
       if (error) {
         alert('Error opening default datastore: ' + error);
       }else{
         agent = new Automator(datastore);
       }
-
     });
   }
 
