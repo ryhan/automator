@@ -1,0 +1,31 @@
+/* app.css */
+
+
+#login{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: white;
+  text-align: center;
+  padding: 200px;
+}
+
+#login a{
+  text-decoration: none;
+  color: #DAE5F3;
+  font-size: 20px;
+  font-weight: 400;
+  padding: 18px;
+
+  display: inline-block;
+  width: 300px;
+  height: 60px;
+
+  background: -webkit-linear-gradient(top, #0B62EB, #0850EB);
+  border: 1px solid #04369B;
+
+  border-radius: 4px;
+}

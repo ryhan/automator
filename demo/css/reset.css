@@ -1,0 +1,19 @@
+html,
+body,
+aside,
+div,
+header,
+textarea,
+nav,
+img,
+a{
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+body{
+  font-family: helvetica, arial, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+}

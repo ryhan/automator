@@ -1,10 +1,17 @@
 /* app.js */
 
 var client;
+var APP_KEY = "d7fdibrrvaw3bbv"
+
+
+function authenticate(){
+
+}
+
 
 $(function() {
 
-  var APP_KEY = "d7fdibrrvaw3bbv"
+
 
   client = new Dropbox.Client({key: APP_KEY});
 
@@ -16,8 +23,10 @@ $(function() {
   });
 
   if (client.isAuthenticated()) {
-    console.log("it worked!");
+
     // Client is authenticated. Display UI.
+    $('#login').hide();
+    var datastoreManager = client.getDatastoreManager();
   }
 
 
