@@ -19,7 +19,7 @@ Automator = (function() {
   Automator.prototype.train = function(text, category) {
     var textArray;
     textArray = text.split(" ");
-    this._increment(categories(category));
+    this._increment(this.categories(category));
   };
 
   Automator.prototype.classify = function(text) {

@@ -15,7 +15,7 @@ class Automator
   train: (text, category) ->
     textArray = text.split " "
 
-    @_increment categories category
+    @_increment @categories category
 
     return
 
