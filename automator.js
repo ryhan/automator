@@ -18,15 +18,13 @@ Automator = (function() {
 
   Automator.prototype.train = function(text, category) {
     var words;
-    words = text.split(" ");
+    words = text.toLowerCase().split(" ");
     this._increment(this.categories, category);
     _.map(words, function(word) {
-      var categoryCounts, count, record;
+      var categoryCount, record;
       record = this._increment(this.words, word);
-      categoryCounts = record.get("categories" || {});
-      count = categoryCounts[category] || 0;
-      categoryCounts[category] = count + 1;
-      return record.set("categories", categoryCounts);
+      categoryCount = (record.get(category)) || 0;
+      return record.set(category, categoryCount + 1);
     });
   };
 
@@ -43,17 +41,17 @@ Automator = (function() {
   Automator.prototype._increment = function(table, name) {
     var count, record, records;
     records = table.query({
-      name: name
+      NAME: name
     });
     record = records[0];
     if (records.length < 1) {
       record = table.insert({
-        name: name,
-        count: 0
+        NAME: name,
+        COUNT: 0
       });
     }
-    count = record.get("count");
-    record.set('count', count + 1);
+    count = record.get("COUNT");
+    record.set('COUNT', count + 1);
     return record;
   };
 
