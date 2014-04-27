@@ -1,12 +1,22 @@
 /* app.js */
 
-var agent;
-var client, datastoreManager;
+var NewsRanker;
 var APP_KEY = "d7fdibrrvaw3bbv"
 
+function loggedIn(datastore){
+
+  // Show the "logged in" UI
+  $('#login').hide();
+
+  // Set up Automator
+  NewsRanker = new Automator(datastore);
+
+}
+
+// Dropbox OAuth Handler
 $(function() {
 
-  client = new Dropbox.Client({key: APP_KEY});
+  var client = new Dropbox.Client({key: APP_KEY});
 
   // Try to finish OAuth authorization.
   client.authenticate({interactive: false}, function (error) {
@@ -15,20 +25,18 @@ $(function() {
     }
   });
 
+  // Once the client is authenticated, open up a datastore.
+  // It doesn't necessarily _need_ to be the default datastore,
+  // and you should never tie more than one Automator to a particular datastore.
   if (client.isAuthenticated()) {
-
-    $('#login').hide();
-
-    datastoreManager = client.getDatastoreManager();
-
+    var datastoreManager = client.getDatastoreManager();
     datastoreManager.openDefaultDatastore(function (error, datastore) {
       if (error) {
         alert('Error opening default datastore: ' + error);
       }else{
-        agent = new Automator(datastore);
+        loggedIn(datastore);
       }
     });
   }
-
 
 });
