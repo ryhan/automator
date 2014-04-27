@@ -16,7 +16,11 @@ Automator = (function() {
     this.words = datastore.getTable("" + this.options.namespace + "-words");
   }
 
-  Automator.prototype.train = function(text, category) {};
+  Automator.prototype.train = function(text, category) {
+    var textArray;
+    textArray = text.split(" ");
+    this._increment(categories(category));
+  };
 
   Automator.prototype.classify = function(text) {
     return {
@@ -26,6 +30,21 @@ Automator = (function() {
         confidence: 0
       }
     };
+  };
+
+  Automator.prototype._increment = function(table, name) {
+    var count, record;
+    record = (table.query({
+      name: name
+    }))[0];
+    if (record != null) {
+      record = table.insert({
+        name: name,
+        count: 0
+      });
+    }
+    count = record.get("count");
+    return record.set('count', count + 1);
   };
 
   return Automator;
