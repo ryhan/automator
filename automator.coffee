@@ -30,10 +30,11 @@ class Automator
   _increment: (table, name) ->
 
     # Search for our record
-    record = (table.query { name: name })[0]
+    records = table.query { name: name }
+    record = records[0]
 
     # If our record doesn't exist, add it
-    if record?
+    if records.length < 1
       record = table.insert
         name: name
         count: 0

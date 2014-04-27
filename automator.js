@@ -33,11 +33,12 @@ Automator = (function() {
   };
 
   Automator.prototype._increment = function(table, name) {
-    var count, record;
-    record = (table.query({
+    var count, record, records;
+    records = table.query({
       name: name
-    }))[0];
-    if (record != null) {
+    });
+    record = records[0];
+    if (records.length < 1) {
       record = table.insert({
         name: name,
         count: 0
