@@ -22,7 +22,7 @@ Automator = (function() {
     this._increment(this.categories, category);
     _.map(words, function(word) {
       var categoryCounts, count, record;
-      record = _increment(this.words, word);
+      record = this._increment(this.words, word);
       categoryCounts = record.get("categories" || {});
       count = categoryCounts[category] || 0;
       categoryCounts[category] = count + 1;

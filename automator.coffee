@@ -22,7 +22,7 @@ class Automator
 
     # For each word, increment the total count by one
     _.map words, (word)->
-      record = _increment @words, word
+      record = @_increment @words, word
       categoryCounts = record.get "categories" || {}
       count = categoryCounts[category] || 0
       categoryCounts[category] = count + 1
