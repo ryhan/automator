@@ -1,17 +1,10 @@
 /* app.js */
 
-var client;
+var agent;
+var client, datastoreManager;
 var APP_KEY = "d7fdibrrvaw3bbv"
 
-
-function authenticate(){
-
-}
-
-
 $(function() {
-
-
 
   client = new Dropbox.Client({key: APP_KEY});
 
@@ -24,9 +17,20 @@ $(function() {
 
   if (client.isAuthenticated()) {
 
-    // Client is authenticated. Display UI.
     $('#login').hide();
-    var datastoreManager = client.getDatastoreManager();
+
+    datastoreManager = client.getDatastoreManager();
+
+    datastoreManager.openDefaultDatastore(function (error, datastore) {
+
+
+      if (error) {
+        alert('Error opening default datastore: ' + error);
+      }else{
+        agent = new Automator(datastore);
+      }
+
+    });
   }
 
 

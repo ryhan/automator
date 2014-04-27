@@ -6,8 +6,9 @@ class Automator
   options:
     dropboxNamespace: "automator"
 
-  constructor: (options = {})->
-    $.extend @options.grid, options
+  constructor: (datastore, options = {})->
+    @datastore = datastore
+    $.extend @options, options
 
   train: (text, category) ->
     return
