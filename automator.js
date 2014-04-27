@@ -17,9 +17,17 @@ Automator = (function() {
   }
 
   Automator.prototype.train = function(text, category) {
-    var textArray;
-    textArray = text.split(" ");
-    this._increment(this.categories(category));
+    var words;
+    words = text.split(" ");
+    this._increment(this.categories, category);
+    _.map(words, function(word) {
+      var categoryCounts, count, record;
+      record = _increment(this.words, word);
+      categoryCounts = record.get("categories" || {});
+      count = categoryCounts[category] || 0;
+      categoryCounts[category] = count + 1;
+      return record.set("categories", categoryCounts);
+    });
   };
 
   Automator.prototype.classify = function(text) {
@@ -45,7 +53,8 @@ Automator = (function() {
       });
     }
     count = record.get("count");
-    return record.set('count', count + 1);
+    record.set('count', count + 1);
+    return record;
   };
 
   return Automator;

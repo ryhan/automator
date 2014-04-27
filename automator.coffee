@@ -13,9 +13,20 @@ class Automator
     @words = datastore.getTable "#{@options.namespace}-words"
 
   train: (text, category) ->
-    textArray = text.split " "
 
-    @_increment @categories category
+    words = text.split " "
+
+
+    # Increment our category's count by one
+    @_increment @categories, category
+
+    # For each word, increment the total count by one
+    _.map words, (word)->
+      record = _increment @words, word
+      categoryCounts = record.get "categories" || {}
+      count = categoryCounts[category] || 0
+      categoryCounts[category] = count + 1
+      record.set "categories", categoryCounts
 
     return
 
@@ -27,6 +38,7 @@ class Automator
       confidence: 0
 
 
+  # Given a table and a key "name", increase key "count" by one.
   _increment: (table, name) ->
 
     # Search for our record
@@ -42,3 +54,5 @@ class Automator
     # Get the current count, and increment by one
     count = record.get "count"
     record.set 'count', count + 1
+
+    return record
