@@ -14,6 +14,7 @@ class Automator
 
   train: (text, category) ->
 
+    category = category.toLowerCase()
     words = text.toLowerCase().split " "
 
     # Increment our category's count by one

@@ -18,6 +18,7 @@ Automator = (function() {
 
   Automator.prototype.train = function(text, category) {
     var words;
+    category = category.toLowerCase();
     words = text.toLowerCase().split(" ");
     this._increment(this.categories, category);
     _.map(words, function(word) {
