@@ -40,11 +40,24 @@ Automator = (function() {
   };
 
   Automator.prototype.classify = function(text) {
+    var maxCategory, maxP, self;
+    self = this;
+    maxCategory = "unknown";
+    maxP = 0;
+    _.map(self.categories.query(), function(record) {
+      var category, p;
+      category = record.get("NAME");
+      p = self._getConditionalProbability(text, category);
+      if (p > maxP) {
+        maxCategory = category;
+        return maxP = p;
+      }
+    });
     return {
       classification: {
-        category: "unknown",
+        category: maxCategory,
         reason: [],
-        confidence: 0
+        confidence: maxP
       }
     };
   };
@@ -59,16 +72,13 @@ Automator = (function() {
     _.map(words, function(word) {
       return pEvidence *= (self._getWordCount(word)) / wordSum;
     });
-    console.log(pEvidence);
     pCond = 1;
     condWordSum = this._sumTableConditional(this.words, category);
     _.map(words, function(word) {
       return pCond *= (self._getConditionalWordCount(word, category)) / condWordSum;
     });
-    console.log(pCond);
     categorySum = this._sumTable(this.categories);
     pCategory = (this._getCategoryCount(category)) / categorySum;
-    console.log(pCategory);
     return pCond * pCategory / pEvidence;
   };
 
