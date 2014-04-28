@@ -68,16 +68,16 @@ class Automator
     # Compute denominator pEvidence (probability of given text)
     pEvidence = 1
     wordSum = @_sumTable @words
-    _.map words, (word) -> pEvidence *= (self._getWordCount word) / wordSum
+    _.map words, (word) -> pEvidence *= ( 1 + self._getWordCount word) / (1 + wordSum)
 
     # Compute pCond (probability of text given a category)
     pCond = 1
     condWordSum = @_sumTableConditional @words, category
-    _.map words, (word) -> pCond *= (self._getConditionalWordCount word, category) / condWordSum
+    _.map words, (word) -> pCond *= (1 + self._getConditionalWordCount word, category) / (1 + condWordSum)
 
     # Compute pCategory (probability of category)
     categorySum = @_sumTable @categories
-    pCategory = (@_getCategoryCount category) / categorySum
+    pCategory = (1 + @_getCategoryCount category) / (1 + categorySum)
 
     return pCond * pCategory / pEvidence
 
