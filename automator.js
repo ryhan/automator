@@ -39,6 +39,63 @@ Automator = (function() {
     };
   };
 
+  Automator.prototype._getConditionalProbability = function(text, givenCategory) {
+    var category, categorySum, condWordSum, pCategory, pCond, pEvidence, wordSum, words;
+    category = givenCategory.toLowerCase();
+    words = text.toLowerCase().split(" ");
+    pEvidence = 1;
+    wordSum = this._sumTable(this.words);
+    _.map(words, function(word) {
+      return pEvidence *= (this._getWordCount(word)) / wordSum;
+    });
+    pCond = 1;
+    condWordSum = this._sumTableConditional(this.words, category);
+    _.map(words, function(word) {
+      return pCond *= (this._getConditionalWordCount(word, category)) / condWordSum;
+    });
+    categorySum = this._sumTable(this.categories);
+    pCategory = (this._getCategoryCount(category)) / categorySum;
+    return pCond * pCategory / pEvidence;
+  };
+
+  Automator.prototype._sumTable = function(table) {
+    var sum;
+    sum = 0;
+    _.map(table.query(), function(record) {
+      return sum += record.get("COUNT");
+    });
+    return sum;
+  };
+
+  Automator.prototype._sumTableConditional = function(table, category) {
+    var sum;
+    sum = 0;
+    _.map(table.query(), function(record) {
+      return sum += record.get(category || 0);
+    });
+    return sum;
+  };
+
+  Automator.prototype._getWordCount = function(word) {
+    return this._getConditionalProbability(word, "COUNT");
+  };
+
+  Automator.prototype._getConditionalWordCount = function(word, category) {
+    var records;
+    records = this.words.query({
+      NAME: word
+    });
+    return (records[0].get(category)) || 0;
+  };
+
+  Automator.prototype._getCategoryCount = function(category) {
+    var records;
+    records = this.categories.query({
+      NAME: category
+    });
+    return (records[0].get("COUNT")) || 0;
+  };
+
   Automator.prototype._increment = function(table, name) {
     var count, record, records;
     records = table.query({
