@@ -84,27 +84,33 @@ class Automator
   # Sum over the "COUNT" property of every record in a table
   _sumTable: (table) ->
     sum = 0
-    _.map table.query(), (record) -> sum += record.get "COUNT"
+    _.map table.query(), (record) -> sum += (record.get "COUNT" || 0)
     sum
 
   # Sum over the category of every record in a table
   _sumTableConditional: (table, category) ->
     sum = 0
-    _.map table.query(), (record) -> sum += (record.get category || 0)
+    _.map table.query(), (record) ->
+      categoryCount = record.get category
+      if category?
+        sum += (record.get category || 0)
     sum
 
   # Given a word, return its total count
   _getWordCount: (word) ->
     records = @words.query {NAME: word}
+    return 0 if records.length < 1
     return ((records[0].get "COUNT") || 0)
 
   # Given a word and a category, return its total count
   _getConditionalWordCount: (word, category) ->
     records = @words.query {NAME: word}
+    return 0 if records.length < 1
     return ((records[0].get category) || 0)
 
   _getCategoryCount: (category) ->
     records = @categories.query {NAME: category}
+    return 0 if records.length < 1
     return ((records[0].get "COUNT") || 0)
 
 

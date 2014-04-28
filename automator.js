@@ -84,7 +84,7 @@ Automator = (function() {
     var sum;
     sum = 0;
     _.map(table.query(), function(record) {
-      return sum += record.get("COUNT");
+      return sum += record.get("COUNT" || 0);
     });
     return sum;
   };
@@ -93,7 +93,11 @@ Automator = (function() {
     var sum;
     sum = 0;
     _.map(table.query(), function(record) {
-      return sum += record.get(category || 0);
+      var categoryCount;
+      categoryCount = record.get(category);
+      if (category != null) {
+        return sum += record.get(category || 0);
+      }
     });
     return sum;
   };
@@ -103,6 +107,9 @@ Automator = (function() {
     records = this.words.query({
       NAME: word
     });
+    if (records.length < 1) {
+      return 0;
+    }
     return (records[0].get("COUNT")) || 0;
   };
 
@@ -111,6 +118,9 @@ Automator = (function() {
     records = this.words.query({
       NAME: word
     });
+    if (records.length < 1) {
+      return 0;
+    }
     return (records[0].get(category)) || 0;
   };
 
@@ -119,6 +129,9 @@ Automator = (function() {
     records = this.categories.query({
       NAME: category
     });
+    if (records.length < 1) {
+      return 0;
+    }
     return (records[0].get("COUNT")) || 0;
   };
 
