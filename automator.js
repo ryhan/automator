@@ -59,13 +59,16 @@ Automator = (function() {
     _.map(words, function(word) {
       return pEvidence *= (self._getWordCount(word)) / wordSum;
     });
+    console.log(pEvidence);
     pCond = 1;
     condWordSum = this._sumTableConditional(this.words, category);
     _.map(words, function(word) {
       return pCond *= (self._getConditionalWordCount(word, category)) / condWordSum;
     });
+    console.log(pCond);
     categorySum = this._sumTable(this.categories);
     pCategory = (this._getCategoryCount(category)) / categorySum;
+    console.log(pCategory);
     return pCond * pCategory / pEvidence;
   };
 

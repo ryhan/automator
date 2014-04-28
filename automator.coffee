@@ -56,14 +56,20 @@ class Automator
     wordSum = @_sumTable @words
     _.map words, (word) -> pEvidence *= (self._getWordCount word) / wordSum
 
+    console.log pEvidence
+
     # Compute pCond (probability of text given a category)
     pCond = 1
     condWordSum = @_sumTableConditional @words, category
     _.map words, (word) -> pCond *= (self._getConditionalWordCount word, category) / condWordSum
 
+    console.log pCond
+
     # Compute pCategory (probability of category)
     categorySum = @_sumTable @categories
     pCategory = (@_getCategoryCount category) / categorySum
+
+    console.log pCategory
 
     return pCond * pCategory / pEvidence
 
