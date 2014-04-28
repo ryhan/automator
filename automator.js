@@ -16,6 +16,15 @@ Automator = (function() {
     this.words = datastore.getTable("" + this.options.namespace + "-words");
   }
 
+  Automator.prototype.clearModel = function() {
+    _.map(this.words.query(), function(record) {
+      return record.deleteRecord();
+    });
+    return _.map(this.categories.query(), function(record) {
+      return record.deleteRecord();
+    });
+  };
+
   Automator.prototype.train = function(text, category) {
     var words;
     category = category.toLowerCase();

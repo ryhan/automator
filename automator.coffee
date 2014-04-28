@@ -12,6 +12,11 @@ class Automator
     @categories = datastore.getTable "#{@options.namespace}-categories"
     @words = datastore.getTable "#{@options.namespace}-words"
 
+
+  clearModel: ->
+    _.map @words.query(), (record) -> record.deleteRecord()
+    _.map @categories.query(), (record) -> record.deleteRecord()
+
   train: (text, category) ->
 
     # Impose lowercase requirement, split up text
