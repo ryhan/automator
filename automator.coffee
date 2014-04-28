@@ -49,15 +49,17 @@ class Automator
     category = givenCategory.toLowerCase()
     words = text.toLowerCase().split " "
 
+    self = this
+
     # Compute denominator pEvidence (probability of given text)
     pEvidence = 1
     wordSum = @_sumTable @words
-    _.map words, (word) -> pEvidence *= (@_getWordCount word) / wordSum
+    _.map words, (word) -> pEvidence *= (self._getWordCount word) / wordSum
 
     # Compute pCond (probability of text given a category)
     pCond = 1
     condWordSum = @_sumTableConditional @words, category
-    _.map words, (word) -> pCond *= (@_getConditionalWordCount word, category) / condWordSum
+    _.map words, (word) -> pCond *= (self._getConditionalWordCount word, category) / condWordSum
 
     # Compute pCategory (probability of category)
     categorySum = @_sumTable @categories

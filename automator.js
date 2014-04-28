@@ -50,18 +50,19 @@ Automator = (function() {
   };
 
   Automator.prototype._getConditionalProbability = function(text, givenCategory) {
-    var category, categorySum, condWordSum, pCategory, pCond, pEvidence, wordSum, words;
+    var category, categorySum, condWordSum, pCategory, pCond, pEvidence, self, wordSum, words;
     category = givenCategory.toLowerCase();
     words = text.toLowerCase().split(" ");
+    self = this;
     pEvidence = 1;
     wordSum = this._sumTable(this.words);
     _.map(words, function(word) {
-      return pEvidence *= (this._getWordCount(word)) / wordSum;
+      return pEvidence *= (self._getWordCount(word)) / wordSum;
     });
     pCond = 1;
     condWordSum = this._sumTableConditional(this.words, category);
     _.map(words, function(word) {
-      return pCond *= (this._getConditionalWordCount(word, category)) / condWordSum;
+      return pCond *= (self._getConditionalWordCount(word, category)) / condWordSum;
     });
     categorySum = this._sumTable(this.categories);
     pCategory = (this._getCategoryCount(category)) / categorySum;
