@@ -86,7 +86,9 @@ class Automator
     sum
 
   # Given a word, return its total count
-  _getWordCount: (word) -> @_getConditionalProbability word, "COUNT"
+  _getWordCount: (word) ->
+    records = @words.query {NAME: word}
+    return ((records[0].get "COUNT") || 0)
 
   # Given a word and a category, return its total count
   _getConditionalWordCount: (word, category) ->

@@ -91,7 +91,11 @@ Automator = (function() {
   };
 
   Automator.prototype._getWordCount = function(word) {
-    return this._getConditionalProbability(word, "COUNT");
+    var records;
+    records = this.words.query({
+      NAME: word
+    });
+    return (records[0].get("COUNT")) || 0;
   };
 
   Automator.prototype._getConditionalWordCount = function(word, category) {
