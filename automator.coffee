@@ -50,10 +50,11 @@ class Automator
         maxCategory = category
         maxP = p
 
-    classification:
+    return {
       category: maxCategory
       reason: []
       confidence: maxP
+    }
 
 
   _getConditionalProbability: (text, givenCategory) ->

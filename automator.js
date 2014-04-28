@@ -54,11 +54,9 @@ Automator = (function() {
       }
     });
     return {
-      classification: {
-        category: maxCategory,
-        reason: [],
-        confidence: maxP
-      }
+      category: maxCategory,
+      reason: [],
+      confidence: maxP
     };
   };
 
