@@ -27,8 +27,9 @@ class Automator
     @_increment @categories, category
 
     # For each word, increment the total count and category count by one
+    self = this
     _.map words, (word)->
-      record = @_increment @words, word
+      record = self._increment self.words, word
       categoryCount = (record.get category) || 0
       record.set category, categoryCount + 1
 

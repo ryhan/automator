@@ -26,13 +26,14 @@ Automator = (function() {
   };
 
   Automator.prototype.train = function(text, category) {
-    var words;
+    var self, words;
     category = category.toLowerCase();
     words = text.toLowerCase().split(" ");
     this._increment(this.categories, category);
+    self = this;
     _.map(words, function(word) {
       var categoryCount, record;
-      record = this._increment(this.words, word);
+      record = self._increment(self.words, word);
       categoryCount = (record.get(category)) || 0;
       return record.set(category, categoryCount + 1);
     });
