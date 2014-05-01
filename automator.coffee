@@ -56,7 +56,7 @@ class Automator
         maxC = category
         maxP = p
 
-    confidence = (maxP - maxPprime / maxP) || 0
+    confidence = ((maxP - maxPprime) / maxP) || 0
 
     return {
       category: maxC
