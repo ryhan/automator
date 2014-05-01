@@ -137,7 +137,7 @@ Automator = (function() {
     _.map(json.words, function(word) {
       var record;
       record = self._incrementBy(self.words, word.NAME, word.COUNT);
-      return _.keys(word, function(category) {
+      return _.map(_.keys(word), function(category) {
         var categoryCount;
         if (category !== "NAME" && category !== "COUNT") {
           categoryCount = (record.get(category)) || 0;

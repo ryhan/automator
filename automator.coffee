@@ -125,7 +125,7 @@ class Automator
     _.map json.words, (word) ->
       record = self._incrementBy self.words, word.NAME, word.COUNT
 
-      _.keys word, (category) ->
+      _.map (_.keys word), (category) ->
         if (category != "NAME" and category != "COUNT")
           categoryCount = (record.get category) || 0
           record.set category, categoryCount + word[category]
