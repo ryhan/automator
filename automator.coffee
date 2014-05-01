@@ -1,5 +1,10 @@
 # automator.coffee
 
+AUTOMATOR_HIDE_DEBUG = true
+
+automator_log = (message) ->
+  console.log message unless AUTOMATOR_HIDE_DEBUG
+
 class Automator
 
   # Defaults
@@ -40,30 +45,32 @@ class Automator
 
     self = this
 
-
     maxC= "unknown"
     maxP = 0
-
     maxCprime= "unknown"
     maxPprime = 0
 
+    # Impose lowercase requirement, split up text
+    words = text.toLowerCase().split " "
+
     _.map self.categories.query(), (record) ->
       category = record.get "NAME"
-      p = self._getConditionalProbability text, category
-      console.log "#{category}, p = #{p}"
+      p = self._getConditionalProbability words, category
+
+      automator_log "#{category}, p = #{p}"
+
       if p >= maxP
         maxCprime = maxC
         maxPprime = maxP
         maxC = category
         maxP = p
-        console.log "New high #{category} p = #{p}"
 
-    console.log "Pmax = #{maxP}"
-    console.log "Pprime = #{maxPprime}"
+    automator_log "Pmax = #{maxP}"
+    automator_log "Pprime = #{maxPprime}"
 
     confidence = ((maxP - maxPprime) / maxP) || 0
 
-    if confidence < 0.1
+    if confidence < 0.01
       return {
         category: "unknown"
         reason: []
@@ -72,16 +79,15 @@ class Automator
 
     return {
       category: maxC
-      reason: []
+      reason: self._getReason words, maxC
       confidence: confidence
     }
 
 
-  _getConditionalProbability: (text, givenCategory) ->
+  _getConditionalProbability: (words, givenCategory) ->
 
     # Impose lowercase requirement, split up text
     category = givenCategory.toLowerCase()
-    words = text.toLowerCase().split " "
 
     self = this
 
@@ -135,6 +141,18 @@ class Automator
     records = @categories.query {NAME: category}
     return 0 if records.length < 1
     return ((records[0].get "COUNT") || 0)
+
+  _getReason: (words, category) ->
+    self = this
+    pairs = _.map words, (word) -> {
+      word: word
+      p: (self._getConditionalWordCount word, category) / (self._getWordCount word)
+    }
+
+    pairs = _.filter pairs, (pair) -> (pair.p > 0.5)
+    pairs = _.sortBy pairs, (pair) -> -1 * pair.p
+    _.pluck pairs, "word"
+
 
 
   # Given a table and a key "name", increase key "count" by one.
