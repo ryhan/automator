@@ -24,6 +24,10 @@ Automator = (function() {
     this.words = datastore.getTable("" + this.options.namespace + "-words");
   }
 
+  Automator.prototype.hasModel = function() {
+    return this.categories.query().length > 0;
+  };
+
   Automator.prototype.clearModel = function() {
     _.map(this.words.query(), function(record) {
       return record.deleteRecord();
@@ -45,6 +49,15 @@ Automator = (function() {
       categoryCount = (record.get(category)) || 0;
       return record.set(category, categoryCount + 1);
     });
+  };
+
+  Automator.prototype.trainForce = function(text, category) {
+    this.train(text, category);
+    if ((this.classify(text)).category !== category) {
+      return this.trainUntil(text, category);
+    } else {
+      return automator_log("Trained");
+    }
   };
 
   Automator.prototype.classify = function(text) {
@@ -84,25 +97,75 @@ Automator = (function() {
     };
   };
 
+  Automator.prototype.toJSON = function() {
+    var categoryNames, propertyNames, response;
+    response = {
+      categories: [],
+      words: []
+    };
+    _.map(this.categories.query(), function(record) {
+      return response.categories.push({
+        "NAME": record.get("NAME"),
+        "COUNT": record.get("COUNT")
+      });
+    });
+    categoryNames = _.map(response.categories, function(category) {
+      return category.NAME;
+    });
+    propertyNames = categoryNames.concat("NAME", "COUNT");
+    _.map(this.words.query(), function(record) {
+      var word;
+      word = {};
+      _.map(propertyNames, function(property) {
+        var val;
+        val = record.get(property);
+        if (val !== null) {
+          return word[property] = val;
+        }
+      });
+      return response.words.push(word);
+    });
+    return response;
+  };
+
+  Automator.prototype.fromJSON = function(json) {
+    var self;
+    self = this;
+    _.map(json.categories, function(category) {
+      return self._incrementBy(self.categories, category.NAME, category.COUNT);
+    });
+    _.map(json.words, function(word) {
+      var record;
+      record = self._incrementBy(self.words, word.NAME, word.COUNT);
+      return _.keys(word, function(category) {
+        var categoryCount;
+        if (category !== "NAME" && category !== "COUNT") {
+          categoryCount = (record.get(category)) || 0;
+          return record.set(category, categoryCount + word[category]);
+        }
+      });
+    });
+  };
+
   Automator.prototype._getConditionalProbability = function(words, givenCategory) {
-    var category, categorySum, condWordSum, pCategory, pCond, pEvidence, self, wordSum;
+    var category, categorySum, condWordSum, ipEvidence, pCategory, pCond, self, wordSum;
     category = givenCategory.toLowerCase();
     self = this;
-    pEvidence = 1;
+    ipEvidence = 1;
     wordSum = this._sumTable(this.words);
     _.map(words, function(word) {
-      return pEvidence *= (1 + self._getWordCount(word)) / (1 + wordSum);
+      return ipEvidence += Math.log((1 + wordSum) / (1 + self._getWordCount(word)));
     });
-    pCond = 1;
+    pCond = 0;
     condWordSum = this._sumTableConditional(this.words, category);
     _.map(words, function(word) {
-      return pCond *= (1 + self._getConditionalWordCount(word, category)) / (1 + condWordSum);
+      return pCond += Math.log((1 + self._getConditionalWordCount(word, category)) / (1 + condWordSum));
     });
     categorySum = this._sumTable(this.categories);
-    pCategory = (1 + this._getCategoryCount(category)) / (1 + categorySum);
-    console.log(category);
-    console.log("" + pCond + " * " + pCategory + " / " + pEvidence);
-    return pCond * pCategory / pEvidence;
+    pCategory = Math.log((1 + this._getCategoryCount(category)) / (1 + categorySum));
+    automator_log(category);
+    automator_log("" + pCond + " + " + pCategory + " + " + ipEvidence);
+    return pCond + pCategory + ipEvidence;
   };
 
   Automator.prototype._sumTable = function(table) {
@@ -179,6 +242,10 @@ Automator = (function() {
   };
 
   Automator.prototype._increment = function(table, name) {
+    return this._incrementBy(table, name, 1);
+  };
+
+  Automator.prototype._incrementBy = function(table, name, increment) {
     var count, record, records;
     records = table.query({
       NAME: name
@@ -191,7 +258,7 @@ Automator = (function() {
       });
     }
     count = record.get("COUNT");
-    record.set('COUNT', count + 1);
+    record.set('COUNT', count + increment);
     return record;
   };
 
