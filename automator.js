@@ -82,6 +82,8 @@ Automator = (function() {
     });
     categorySum = this._sumTable(this.categories);
     pCategory = (1 + this._getCategoryCount(category)) / (1 + categorySum);
+    console.log(category);
+    console.log("" + pCond + " * " + pCategory + " / " + pEvidence);
     return pCond * pCategory / pEvidence;
   };
 

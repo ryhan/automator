@@ -87,6 +87,9 @@ class Automator
     categorySum = @_sumTable @categories
     pCategory = (1 + @_getCategoryCount category) / (1 + categorySum)
 
+    console.log category
+    console.log "#{pCond} * #{pCategory} / #{pEvidence}"
+
     return pCond * pCategory / pEvidence
 
   # Sum over the "COUNT" property of every record in a table
