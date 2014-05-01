@@ -56,7 +56,10 @@ class Automator
         maxPprime = maxP
         maxC = category
         maxP = p
-        console.log "New high #{{category}}p = #{p}"
+        console.log "New high #{{category}} p = #{p}"
+
+    console.log "Pmax = #{{maxP}}"
+    console.log "Pprime = #{{maxPprime}}"
 
     confidence = ((maxP - maxPprime) / maxP) || 0
 

@@ -58,8 +58,14 @@ Automator = (function() {
         maxP = p;
         return console.log("New high " + {
           category: category
-        } + "p = " + p);
+        } + " p = " + p);
       }
+    });
+    console.log("Pmax = " + {
+      maxP: maxP
+    });
+    console.log("Pprime = " + {
+      maxPprime: maxPprime
     });
     confidence = ((maxP - maxPprime) / maxP) || 0;
     return {
