@@ -9,7 +9,7 @@ function loggedIn(datastore){
   $('#login').hide();
 
   // Set up Automator
-  //NewsRanker = new Automator(datastore);
+  NewsRanker = new Automator(datastore);
 
 
   showStories();
@@ -50,7 +50,7 @@ $(function() {
 function getHeadlines(success)
 {
   $.ajax({
-    url : 'http://query.yahooapis.com/v1/public/yql',
+    url : 'https://query.yahooapis.com/v1/public/yql',
     jsonp : 'callback',
     dataType : 'jsonp',
     data : {
