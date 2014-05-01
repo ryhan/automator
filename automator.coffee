@@ -51,7 +51,7 @@ class Automator
       category = record.get "NAME"
       p = self._getConditionalProbability text, category
       console.log "#{category}, p = #{p}"
-      if p > maxP
+      if p >= maxP
         maxCprime = maxC
         maxPprime = maxP
         maxC = category
@@ -62,6 +62,13 @@ class Automator
     console.log "Pprime = #{maxPprime}"
 
     confidence = ((maxP - maxPprime) / maxP) || 0
+
+    if confidence < 0.1
+      return {
+        category: "unknown"
+        reason: []
+        confidence: confidence
+      }
 
     return {
       category: maxC
