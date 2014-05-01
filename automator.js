@@ -56,17 +56,11 @@ Automator = (function() {
         maxPprime = maxP;
         maxC = category;
         maxP = p;
-        return console.log("New high " + {
-          category: category
-        } + " p = " + p);
+        return console.log("New high " + category + " p = " + p);
       }
     });
-    console.log("Pmax = " + {
-      maxP: maxP
-    });
-    console.log("Pprime = " + {
-      maxPprime: maxPprime
-    });
+    console.log("Pmax = " + maxP);
+    console.log("Pprime = " + maxPprime);
     confidence = ((maxP - maxPprime) / maxP) || 0;
     return {
       category: maxC,
