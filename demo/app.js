@@ -63,14 +63,14 @@ function getHeadlines(success)
 
 function isRecommended(title){
   var text = natural.PorterStemmer.tokenizeAndStem(title).join(" ");
-  var classification = NewsRanker.classify(title);
+  var classification = NewsRanker.classify(text);
   return (classification.category == "recommend");
 }
 
 function recommend(title, recommend){
   var text = natural.PorterStemmer.tokenizeAndStem(title).join(" ");
   var category = recommend ? "recommend" : "not";
-  NewsRanker.trainForce(title, category);
+  NewsRanker.trainForce(text, category);
 }
 
 function addStory(story){
