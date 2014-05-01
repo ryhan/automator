@@ -144,16 +144,16 @@ class Automator
     ipEvidence = 1
     wordSum = @_sumTable @words
     # _.map words, (word) -> pEvidence *= ( 1 + self._getWordCount word) / (1 + wordSum)
-    _.map words, (word) -> ipEvidence += Math.log((1 + wordSum) / ( 1 + self._getWordCount word))
+    _.map words, (word) -> ipEvidence += Math.log((wordSum) / (self._getWordCount word))
 
     # Compute pCond (probability of text given a category)
     pCond = 0
     condWordSum = @_sumTableConditional @words, category
-    _.map words, (word) -> pCond += Math.log((1 + self._getConditionalWordCount word, category) / (1 + condWordSum))
+    _.map words, (word) -> pCond += Math.log((self._getConditionalWordCount word, category) / (condWordSum))
 
     # Compute pCategory (probability of category)
     categorySum = @_sumTable @categories
-    pCategory = Math.log((1 + @_getCategoryCount category) / (1 + categorySum))
+    pCategory = Math.log((@_getCategoryCount category) / (categorySum))
 
     automator_log category
     automator_log "#{pCond} + #{pCategory} + #{ipEvidence}"

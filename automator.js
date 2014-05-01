@@ -154,15 +154,15 @@ Automator = (function() {
     ipEvidence = 1;
     wordSum = this._sumTable(this.words);
     _.map(words, function(word) {
-      return ipEvidence += Math.log((1 + wordSum) / (1 + self._getWordCount(word)));
+      return ipEvidence += Math.log(wordSum / (self._getWordCount(word)));
     });
     pCond = 0;
     condWordSum = this._sumTableConditional(this.words, category);
     _.map(words, function(word) {
-      return pCond += Math.log((1 + self._getConditionalWordCount(word, category)) / (1 + condWordSum));
+      return pCond += Math.log((self._getConditionalWordCount(word, category)) / condWordSum);
     });
     categorySum = this._sumTable(this.categories);
-    pCategory = Math.log((1 + this._getCategoryCount(category)) / (1 + categorySum));
+    pCategory = Math.log((this._getCategoryCount(category)) / categorySum);
     automator_log(category);
     automator_log("" + pCond + " + " + pCategory + " + " + ipEvidence);
     return pCond + pCategory + ipEvidence;

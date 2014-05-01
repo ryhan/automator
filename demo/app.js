@@ -54,6 +54,7 @@ function getHeadlines(success)
     jsonp : 'callback',
     dataType : 'jsonp',
     data : {
+      /* TODO add support for other rss feeds */
       q : "select title, link from rss where url='http://rss.news.yahoo.com/rss/topstories'",
       format : 'json'
     },
