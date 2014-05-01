@@ -9,7 +9,10 @@ function loggedIn(datastore){
   $('#login').hide();
 
   // Set up Automator
-  NewsRanker = new Automator(datastore);
+  //NewsRanker = new Automator(datastore);
+
+
+  showStories();
 
 }
 
@@ -39,4 +42,36 @@ $(function() {
     });
   }
 
+
+  loggedIn({});
+
 });
+
+
+function getHeadlines(success)
+{
+  $.ajax({
+    url : 'http://query.yahooapis.com/v1/public/yql',
+    jsonp : 'callback',
+    dataType : 'jsonp',
+    data : {
+      q : "select title, link from rss where url='http://rss.news.yahoo.com/rss/topstories'",
+      format : 'json'
+    },
+    success : function(data){ return success(data);}
+  });
+}
+
+function addStory(story){
+  var link = $("<a />").attr("href", story.link).text(story.title);
+  var recommend = $("<span class='recommend' />");
+  var li = $("<li />").append(link);
+  li.append(recommend);
+  $('#links').append(li);
+}
+
+function showStories(){
+  getHeadlines(function(data){
+    _.map(data.query.results.item, addStory);
+  });
+}
