@@ -40,20 +40,28 @@ class Automator
 
     self = this
 
-    maxCategory = "unknown"
+
+    maxC= "unknown"
     maxP = 0
+
+    maxCprime= "unknown"
+    maxPprime = 0
 
     _.map self.categories.query(), (record) ->
       category = record.get "NAME"
       p = self._getConditionalProbability text, category
       if p > maxP
-        maxCategory = category
+        maxCprime = maxC
+        maxPprime = maxP
+        maxC = category
         maxP = p
 
+    confidence = (maxP - maxPprime / maxP) || 0
+
     return {
-      category: maxCategory
+      category: maxC
       reason: []
-      confidence: maxP
+      confidence: confidence
     }
 
 

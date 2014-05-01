@@ -40,23 +40,28 @@ Automator = (function() {
   };
 
   Automator.prototype.classify = function(text) {
-    var maxCategory, maxP, self;
+    var confidence, maxC, maxCprime, maxP, maxPprime, self;
     self = this;
-    maxCategory = "unknown";
+    maxC = "unknown";
     maxP = 0;
+    maxCprime = "unknown";
+    maxPprime = 0;
     _.map(self.categories.query(), function(record) {
       var category, p;
       category = record.get("NAME");
       p = self._getConditionalProbability(text, category);
       if (p > maxP) {
-        maxCategory = category;
+        maxCprime = maxC;
+        maxPprime = maxP;
+        maxC = category;
         return maxP = p;
       }
     });
+    confidence = (maxP - maxPprime / maxP) || 0;
     return {
-      category: maxCategory,
+      category: maxC,
       reason: [],
-      confidence: maxP
+      confidence: confidence
     };
   };
 
