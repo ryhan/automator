@@ -42,8 +42,7 @@ $(function() {
     });
   }
 
-
-  loggedIn({});
+  // loggedIn({});
 
 });
 
@@ -62,12 +61,25 @@ function getHeadlines(success)
   });
 }
 
+function isRecommended(story){
+  var text = natural.PorterStemmer.tokenizeAndStem(story.title).join(" ");
+  var classification = NewsRanker.classify(story.title);
+  return (classification.category == "recommend");
+}
+
 function addStory(story){
   var link = $("<a />").attr("href", story.link).text(story.title);
   var recommend = $("<span class='recommend' />");
   var li = $("<li />").append(link);
   li.append(recommend);
-  $('#links').append(li);
+
+  if (isRecommended(story) == true){
+    $('#nogeniusresults').hide();
+    $('#genius').append(li);
+  }else{
+    $('#links').append(li);
+  }
+
 }
 
 function showStories(){
