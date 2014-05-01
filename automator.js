@@ -50,11 +50,15 @@ Automator = (function() {
       var category, p;
       category = record.get("NAME");
       p = self._getConditionalProbability(text, category);
+      console.log("" + category + ", p = " + p);
       if (p > maxP) {
         maxCprime = maxC;
         maxPprime = maxP;
         maxC = category;
-        return maxP = p;
+        maxP = p;
+        return console.log("New high " + {
+          category: category
+        } + "p = " + p);
       }
     });
     confidence = ((maxP - maxPprime) / maxP) || 0;
