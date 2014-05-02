@@ -67,7 +67,8 @@ function getHeadlines(success)
 
   var feeds = [
     "http://rss.news.yahoo.com/rss/topstories",
-    "http://www.theverge.com/rss/group/longform/index.xml"
+    "http://feeds.feedburner.com/fastcodesign/feed",
+    "https://news.layervault.com/?format=rss"
   ];
 
   _.map(feeds, function(feed){
