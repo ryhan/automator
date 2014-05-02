@@ -61,11 +61,21 @@ function getHeadlines(success)
   });
 }
 
-function isRecommended(title){
-  return (Math.random() > 0.8);
+
+function getFeatures(title){
   var text = natural.PorterStemmer.tokenizeAndStem(title).join(" ");
-  var classification = NewsRanker.classify(text);
+  return text;
+}
+
+function isRecommended(title){
+  //return (Math.random() > 0.8);
+  var classification = NewsRanker.classify(getFeatures(text));
   return (classification.category == "recommend");
+}
+
+function train(title, recommendBool){
+  var classification = recommendBool ? "recommend" : "not";
+  NewsRanker.train(getFeatures(title), classification);
 }
 
 function recommend(title, recommend){
@@ -103,8 +113,14 @@ function applyClickHandlers(){
     var link = li.find("a");
 
     if (li.hasClass("recommended") == true){
+      train(link.text(), false);
       li.hide();
     }else{
+      if (li.hasClass("added") == false){
+        train(link.text(), true);
+      }else{
+        train(link.text(), false);
+      }
       li.toggleClass("added");
     }
   };
