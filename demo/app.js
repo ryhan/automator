@@ -62,7 +62,7 @@ function getHeadlines(success)
 }
 
 function isRecommended(title){
-  //return (Math.random() > 0.8);
+  return (Math.random() > 0.8);
   var text = natural.PorterStemmer.tokenizeAndStem(title).join(" ");
   var classification = NewsRanker.classify(text);
   return (classification.category == "recommend");
@@ -96,9 +96,29 @@ function addStory(story){
 
 }
 
+function applyClickHandlers(){
+
+  var clickHandler = function(e){
+    var li = $(e.target).parent();
+    var link = li.find("a");
+
+    if li.hasClass("recommended"){
+      li.hide();
+    }else{
+      li.toggleClass("added");
+    }
+  };
+
+  $("span.recommend").click(clickHandler);
+
+}
+
 var stories = [];
 function showStories(){
   getHeadlines(function(data){
     _.map(data.query.results.item, addStory);
+    applyClickHandlers();
   });
 }
+
+
