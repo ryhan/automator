@@ -102,7 +102,7 @@ function applyClickHandlers(){
     var li = $(e.target).parent();
     var link = li.find("a");
 
-    if li.hasClass("recommended"){
+    if (li.hasClass("recommended") == true){
       li.hide();
     }else{
       li.toggleClass("added");
