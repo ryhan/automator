@@ -144,7 +144,7 @@ function applyClickHandlers(){
     var records = recommendedArticles.query({"title": text});
     if (records.length > 0){
       record = records[0];
-      record..deleteRecord();
+      record.deleteRecord();
     }
   };
 
