@@ -69,7 +69,7 @@ function getFeatures(title){
 
 function isRecommended(title){
   //return (Math.random() > 0.8);
-  var classification = NewsRanker.classify(getFeatures(text));
+  var classification = NewsRanker.classify(getFeatures(title));
   return (classification.category == "recommend");
 }
 
