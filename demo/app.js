@@ -12,7 +12,7 @@ function loggedIn(datastore){
 
   // Set up Automator
   NewsRanker = new Automator(datastore);
-  recommendedArticles = datastore.getTable "recommendedArticles";
+  recommendedArticles = datastore.getTable("recommendedArticles");
 
   showStories();
 
