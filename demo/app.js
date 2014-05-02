@@ -11,7 +11,6 @@ function loggedIn(datastore){
   // Set up Automator
   NewsRanker = new Automator(datastore);
 
-
   showStories();
 
 }
@@ -63,6 +62,7 @@ function getHeadlines(success)
 }
 
 function isRecommended(title){
+  //return (Math.random() > 0.8);
   var text = natural.PorterStemmer.tokenizeAndStem(title).join(" ");
   var classification = NewsRanker.classify(text);
   return (classification.category == "recommend");
@@ -75,7 +75,7 @@ function recommend(title, recommend){
 }
 
 function addStory(story){
-  var link = $("<a />").attr("href", story.link).text(story.title);
+  var link = $("<a target='_blank' />").attr("href", story.link).text(story.title);
   var recommend = $("<span class='recommend' />");
   var li = $("<li />").append(link);
   li.append(recommend);
@@ -86,12 +86,17 @@ function addStory(story){
     li.addClass('recommended');
     $('#genius').after(li);
   }else{
-
+    /*
+    if (Math.random() > 0.8){
+      li.addClass('added');
+    }
+    */
     $('#links').append(li);
   }
 
 }
 
+var stories = [];
 function showStories(){
   getHeadlines(function(data){
     _.map(data.query.results.item, addStory);

@@ -156,6 +156,15 @@ body{
   color: #3E27A0;
 }
 
+.links li.added{
+  background-color: #D1FFE4;
+  color: #1B5D36;
+  /*
+  background-color: #DDD;
+  color: #888;
+  */
+}
+
 .links li.head:first-child{
   -webkit-border-top-left-radius: 5px;
   -webkit-border-top-right-radius: 5px;
@@ -179,7 +188,7 @@ span.recommend{
   width: 24px;
   height: 24px;
   display: inline-block;
-  background-image: url('../img/glyphicons_218_circle_arrow_top.png');
+  background-image: url('../img/glyphicons_190_circle_plus.png');
 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -193,12 +202,25 @@ span.recommend:hover{
   /*background-image: url('../img/great.png');*/
 }
 
-.recommended span.recommend{
-  opacity: 0.3;
-  background-image: url('../img/glyphicons_219_circle_arrow_down.png');
+.added span.recommend{
+  background-image: url('../img/glyphicons_193_circle_ok.png');
+}
+.added span.recommend:hover{
+  opacity: 0.5;
+  background-image: url('../img/glyphicons_192_circle_remove.png');
 }
 
-.recommended span.recommend:hover{
+.recommended span.recommend{
+  opacity: 0;
+  background-image: url('../img/glyphicons_192_circle_remove.png');
+}
+
+.recommended:hover span.recommend{
+  opacity: 0.2;
+  /*background-image: url('../img/remove.png');*/
+}
+
+.recommended:hover span.recommend:hover{
   opacity: 0.6;
   /*background-image: url('../img/remove.png');*/
 }
