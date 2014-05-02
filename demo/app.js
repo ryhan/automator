@@ -46,19 +46,34 @@ $(function() {
 });
 
 
-function getHeadlines(success)
-{
-  $.ajax({
+function fetchRSS(feed, success){
+   $.ajax({
     url : 'https://query.yahooapis.com/v1/public/yql',
     jsonp : 'callback',
     dataType : 'jsonp',
     data : {
       /* TODO add support for other rss feeds */
-      q : "select title, link from rss where url='http://rss.news.yahoo.com/rss/topstories'",
+      q : "select title, link from rss where url='" + feed + "'",
       format : 'json'
     },
     success : function(data){ return success(data);}
   });
+
+}
+
+
+function getHeadlines(success)
+{
+
+  var feeds = [
+    "http://rss.news.yahoo.com/rss/topstories",
+    "http://www.theverge.com/rss/group/longform/index.xml"
+  ];
+
+  _.map(feeds, function(feed){
+    fetchRSS(feed, success);
+  });
+
 }
 
 
