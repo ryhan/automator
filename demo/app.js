@@ -53,7 +53,7 @@ function fetchRSS(feed, success){
     dataType : 'jsonp',
     data : {
       /* TODO add support for other rss feeds */
-      q : "select title, link from rss where url='" + feed + "'",
+      q : "select title, link, pubDate from rss where url='" + feed + "'",
       format : 'json'
     },
     success : function(data){ return success(data);}
@@ -62,6 +62,7 @@ function fetchRSS(feed, success){
 }
 
 
+var stories = [];
 function getHeadlines(success)
 {
 
@@ -71,8 +72,21 @@ function getHeadlines(success)
     "https://news.layervault.com/?format=rss"
   ];
 
+  var count = feeds.length;
+
   _.map(feeds, function(feed){
-    fetchRSS(feed, success);
+    fetchRSS(feed, function(data){
+      count -= 1;
+      _.map(data.query.results.item, function(story){
+        story.date = new Date(story.pubDate);
+        stories.push(story);
+      });
+
+      if (count == 0){
+        stories = _.sortBy(stories, function(o) { return o.date });
+        success(stories);
+      }
+    });
   });
 
 }
@@ -145,10 +159,11 @@ function applyClickHandlers(){
 
 }
 
-var stories = [];
+
 function showStories(){
-  getHeadlines(function(data){
-    _.map(data.query.results.item, addStory);
+  getHeadlines(function(stories){
+    _.map(stories, addStory);
+    //_.map(data.query.results.item, addStory);
     applyClickHandlers();
   });
 }
