@@ -1,7 +1,9 @@
 /* app.js */
 
 var NewsRanker;
-var APP_KEY = "d7fdibrrvaw3bbv"
+var APP_KEY = "d7fdibrrvaw3bbv";
+
+var recommendedArticles;
 
 function loggedIn(datastore){
 
@@ -10,6 +12,7 @@ function loggedIn(datastore){
 
   // Set up Automator
   NewsRanker = new Automator(datastore);
+  recommendedArticles = datastore.getTable "recommendedArticles";
 
   showStories();
 
@@ -126,11 +129,10 @@ function addStory(story){
     li.addClass('recommended');
     $('#genius').after(li);
   }else{
-    /*
-    if (Math.random() > 0.8){
+    var records = recommendedArticles.query({"title": story.title});
+    if (records.length > 0){
       li.addClass('added');
     }
-    */
     $('#links').append(li);
   }
 
@@ -138,18 +140,35 @@ function addStory(story){
 
 function applyClickHandlers(){
 
+  var removeRecommendation = function(text){
+    var records = recommendedArticles.query({"title": text});
+    if (records.length > 0){
+      record = records[0];
+      record..deleteRecord();
+    }
+  };
+
+  var addRecommendation = function(text){
+    recommendedArticles.insert({
+      "title": text
+    });
+  };
+
   var clickHandler = function(e){
     var li = $(e.target).parent();
     var link = li.find("a");
 
     if (li.hasClass("recommended") == true){
       train(link.text(), false);
+      removeRecommendation(link.text());
       li.hide();
     }else{
       if (li.hasClass("added") == false){
         train(link.text(), true);
+        addRecommendation(link.text());
       }else{
         train(link.text(), false);
+        removeRecommendation(link.text());
       }
       li.toggleClass("added");
     }
