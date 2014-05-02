@@ -23,7 +23,7 @@ var myClassifier;
 if (client.isAuthenticated()) {
   var datastoreManager = client.getDatastoreManager();
   datastoreManager.openDefaultDatastore(function (error, datastore) {
-  
+
     // Make an Automator object by passing in your datastore.
     myClassifier = new Automator(datastore);
   }
@@ -36,7 +36,7 @@ if (client.isAuthenticated()) {
 Once you have created your classifier, you can train it by supplying a string of space delimited lowercase words and a category (classification) name.
 ```javascript
 myClassifier.train("some lowercase space delimited text", "spam");
-myClassifier.train("Man I really love bagels", "not spam");
+myClassifier.train("man I really love bagels", "not spam");
 ```
 
 ### Classify something
